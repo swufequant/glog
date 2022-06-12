@@ -535,6 +535,9 @@ DECLARE_bool(log_utc_time);
 #define LOG_TO_STRING_FATAL(message) @ac_google_namespace@::NullStreamFatal()
 #endif
 
+#define COMPACT_GOOGLE_LOG_GLOG_USER1 @ac_google_namespace@::NullStreamFatal()
+#define LOG_TO_STRING_GLOG_USER1(message) @ac_google_namespace@::NullStreamFatal()
+
 #if defined(NDEBUG) && !defined(DCHECK_ALWAYS_ON)
 #define DCHECK_IS_ON() 0
 #else

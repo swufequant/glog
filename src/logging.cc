@@ -396,13 +396,16 @@ struct LogMessage::LogMessageData  {
 static Mutex log_mutex;
 
 // Number of messages sent at each severity.  Under log_mutex.
-int64 LogMessage::num_messages_[NUM_SEVERITIES] = {0, 0, 0, 0};
-
+// int64 LogMessage::num_messages_[NUM_SEVERITIES] = {0, 0, 0, 0};
+int64 LogMessage::num_messages_[NUM_SEVERITIES] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 // Globally disable log writing (if disk is full)
 static bool stop_writing = false;
 
 const char*const LogSeverityNames[NUM_SEVERITIES] = {
-  "INFO", "WARNING", "ERROR", "FATAL"
+  "INFO", "WARNING", "ERROR", "FATAL",
+//  };
+  "USER1", "USER2", "USER3", "USER4",
+  "USER5", "USER6", "USER7", "USER8"
 };
 
 // Has the user called SetExitOnDFatal(true)?
@@ -876,8 +879,17 @@ inline void LogDestination::LogToAllLogfiles(LogSeverity severity,
   } else if (FLAGS_logtostderr) {  // global flag: never log to file
     ColoredWriteToStderr(severity, message, len);
   } else {
-    for (int i = severity; i >= 0; --i) {
-      LogDestination::MaybeLogToLogfile(i, timestamp, message, len);
+    // 默认日志级别 在当前以及以下级别输出日志
+    if (severity <= GLOG_FATAL)
+    {
+      for (int i = severity; i >= 0; --i) {
+        LogDestination::MaybeLogToLogfile(i, timestamp, message, len);
+      }
+    }
+    // 用户日志级别 只在当前日志级别文件记录当前信息
+    else
+    {
+      LogDestination::MaybeLogToLogfile(severity, timestamp, message, len);
     }
   }
 }
@@ -977,6 +989,7 @@ LogFileObject::LogFileObject(LogSeverity severity,
     rollover_attempt_(kRolloverAttemptFrequency-1),
     next_flush_time_(0),
     start_time_(WallTime_Now()) {
+  printf("log level:%s filename:%s\n", LogSeverityNames[severity], base_filename);
   assert(severity >= 0);
   assert(severity < NUM_SEVERITIES);
 }
@@ -1000,6 +1013,7 @@ void LogFileObject::SetBasename(const char* basename) {
       rollover_attempt_ = kRolloverAttemptFrequency-1;
     }
     base_filename_ = basename;
+    printf("log level:%s filename:%s\n", LogSeverityNames[severity_], basename);
   }
 }
 
@@ -1019,6 +1033,7 @@ void LogFileObject::SetExtension(const char* ext) {
 void LogFileObject::SetSymlinkBasename(const char* symlink_basename) {
   MutexLock l(&lock_);
   symlink_basename_ = symlink_basename;
+  printf("log level:%s symlink filename:%s\n", LogSeverityNames[severity_], symlink_basename);
 }
 
 void LogFileObject::Flush() {
@@ -1050,6 +1065,7 @@ bool LogFileObject::CreateLogfile(const string& time_pid_string) {
     //demand that the file is unique for our timestamp (fail if it exists).
     flags = flags | O_EXCL;
   }
+  printf("log level:%s create filename:%s\n", LogSeverityNames[severity_], filename);
   int fd = open(filename, flags, FLAGS_logfile_mode);
   if (fd == -1) return false;
 #ifdef HAVE_FCNTL

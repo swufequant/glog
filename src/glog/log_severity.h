@@ -49,9 +49,11 @@
 // [0, NUM_SEVERITIES-1].  Be careful to preserve this assumption if
 // you ever need to change their values or add a new severity.
 typedef int LogSeverity;
-
+// 定义日志级别
 const int GLOG_INFO = 0, GLOG_WARNING = 1, GLOG_ERROR = 2, GLOG_FATAL = 3,
-  NUM_SEVERITIES = 4;
+//    NUM_SEVERITIES = 4;
+  NUM_SEVERITIES = 12, GLOG_USER1 = 4, GLOG_USER2 = 5, GLOG_USER3 = 6,
+  GLOG_USER4 = 7, GLOG_USER5= 8, GLOG_USER6 = 9, GLOG_USER7 = 10, GLOG_USER8 = 11;
 #ifndef GLOG_NO_ABBREVIATED_SEVERITIES
 # ifdef ERROR
 #  error ERROR macro is defined. Define GLOG_NO_ABBREVIATED_SEVERITIES before including logging.h. See the document for detail.
