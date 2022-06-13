@@ -315,6 +315,16 @@ static GLogColor SeverityToColor(LogSeverity severity) {
   case GLOG_FATAL:
     color = COLOR_RED;
     break;
+  case GLOG_USER1:
+  case GLOG_USER2:
+  case GLOG_USER3:
+  case GLOG_USER4:
+  case GLOG_USER5:
+  case GLOG_USER6:
+  case GLOG_USER7:
+  case GLOG_USER8:
+    color = COLOR_DEFAULT;
+    break;
   default:
     // should never get here.
     assert(false);
@@ -792,7 +802,8 @@ static void ColoredWriteToStdout(LogSeverity severity, const char* message,
   FILE* output = stdout;
   // We also need to send logs to the stderr when the severity is
   // higher or equal to the stderr threshold.
-  if (severity >= FLAGS_stderrthreshold) {
+  // 防止用户自定义日志级别输出标准错误
+  if (severity >= FLAGS_stderrthreshold && severity <= GLOG_FATAL) {
     output = stderr;
   }
   ColoredWriteToStderrOrStdout(output, severity, message, len);
@@ -811,7 +822,8 @@ static void WriteToStderr(const char* message, size_t len) {
 
 inline void LogDestination::MaybeLogToStderr(LogSeverity severity,
 					     const char* message, size_t message_len, size_t prefix_len) {
-  if ((severity >= FLAGS_stderrthreshold) || FLAGS_alsologtostderr) {
+  // 防止用户自定义日志级别输出标准错误
+  if ((severity >= FLAGS_stderrthreshold && severity <= GLOG_FATAL) || FLAGS_alsologtostderr) {
     ColoredWriteToStderr(severity, message, message_len);
 #ifdef GLOG_OS_WINDOWS
     (void) prefix_len;
@@ -989,7 +1001,6 @@ LogFileObject::LogFileObject(LogSeverity severity,
     rollover_attempt_(kRolloverAttemptFrequency-1),
     next_flush_time_(0),
     start_time_(WallTime_Now()) {
-  printf("log level:%s filename:%s\n", LogSeverityNames[severity], base_filename);
   assert(severity >= 0);
   assert(severity < NUM_SEVERITIES);
 }
@@ -1013,7 +1024,6 @@ void LogFileObject::SetBasename(const char* basename) {
       rollover_attempt_ = kRolloverAttemptFrequency-1;
     }
     base_filename_ = basename;
-    printf("log level:%s filename:%s\n", LogSeverityNames[severity_], basename);
   }
 }
 
@@ -1033,7 +1043,6 @@ void LogFileObject::SetExtension(const char* ext) {
 void LogFileObject::SetSymlinkBasename(const char* symlink_basename) {
   MutexLock l(&lock_);
   symlink_basename_ = symlink_basename;
-  printf("log level:%s symlink filename:%s\n", LogSeverityNames[severity_], symlink_basename);
 }
 
 void LogFileObject::Flush() {
@@ -1065,7 +1074,6 @@ bool LogFileObject::CreateLogfile(const string& time_pid_string) {
     //demand that the file is unique for our timestamp (fail if it exists).
     flags = flags | O_EXCL;
   }
-  printf("log level:%s create filename:%s\n", LogSeverityNames[severity_], filename);
   int fd = open(filename, flags, FLAGS_logfile_mode);
   if (fd == -1) return false;
 #ifdef HAVE_FCNTL
@@ -1258,7 +1266,9 @@ void LogFileObject::Write(bool force_flush,
         return;
       }
     }
-
+    // 用户自定义格式不写头部说明 header message
+    if (severity_ <= GLOG_FATAL)
+    {
     // Write a header message into the log file
     ostringstream file_header_stream;
     file_header_stream.fill('0');
@@ -1289,6 +1299,7 @@ void LogFileObject::Write(bool force_flush,
     fwrite(file_header_string.data(), 1, header_len, file_);
     file_length_ += header_len;
     bytes_since_flush_ += header_len;
+    } // 用户自定义格式不写头部说明 header message
   }
 
   // Write to LOG file

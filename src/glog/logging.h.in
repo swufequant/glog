@@ -535,8 +535,46 @@ DECLARE_bool(log_utc_time);
 #define LOG_TO_STRING_FATAL(message) @ac_google_namespace@::NullStreamFatal()
 #endif
 
-#define COMPACT_GOOGLE_LOG_GLOG_USER1 @ac_google_namespace@::NullStreamFatal()
-#define LOG_TO_STRING_GLOG_USER1(message) @ac_google_namespace@::NullStreamFatal()
+// 自定义用户日志级别1
+#define COMPACT_GOOGLE_LOG_GLOG_USER1 @ac_google_namespace@::LogMessage( \
+      __FILE__, __LINE__, @ac_google_namespace@::GLOG_USER1)
+#define LOG_TO_STRING_GLOG_USER1(message) @ac_google_namespace@::LogMessage( \
+      __FILE__, __LINE__, @ac_google_namespace@::GLOG_USER1, message)
+// 自定义用户日志级别2
+#define COMPACT_GOOGLE_LOG_GLOG_USER2 @ac_google_namespace@::LogMessage( \
+      __FILE__, __LINE__, @ac_google_namespace@::GLOG_USER2)
+#define LOG_TO_STRING_GLOG_USER2(message) @ac_google_namespace@::LogMessage( \
+      __FILE__, __LINE__, @ac_google_namespace@::GLOG_USER2, message)
+// 自定义用户日志级别3
+#define COMPACT_GOOGLE_LOG_GLOG_USER3 @ac_google_namespace@::LogMessage( \
+      __FILE__, __LINE__, @ac_google_namespace@::GLOG_USER3)
+#define LOG_TO_STRING_GLOG_USER3(message) @ac_google_namespace@::LogMessage( \
+      __FILE__, __LINE__, @ac_google_namespace@::GLOG_USER3, message)
+// 自定义用户日志级别4
+#define COMPACT_GOOGLE_LOG_GLOG_USER4 @ac_google_namespace@::LogMessage( \
+      __FILE__, __LINE__, @ac_google_namespace@::GLOG_USER4)
+#define LOG_TO_STRING_GLOG_USER4(message) @ac_google_namespace@::LogMessage( \
+      __FILE__, __LINE__, @ac_google_namespace@::GLOG_USER4, message)
+// 自定义用户日志级别5
+#define COMPACT_GOOGLE_LOG_GLOG_USER5 @ac_google_namespace@::LogMessage( \
+      __FILE__, __LINE__, @ac_google_namespace@::GLOG_USER5)
+#define LOG_TO_STRING_GLOG_USER5(message) @ac_google_namespace@::LogMessage( \
+      __FILE__, __LINE__, @ac_google_namespace@::GLOG_USER5, message)
+// 自定义用户日志级别6
+#define COMPACT_GOOGLE_LOG_GLOG_USER6 @ac_google_namespace@::LogMessage( \
+      __FILE__, __LINE__, @ac_google_namespace@::GLOG_USER6)
+#define LOG_TO_STRING_GLOG_USER6(message) @ac_google_namespace@::LogMessage( \
+      __FILE__, __LINE__, @ac_google_namespace@::GLOG_USER6, message)
+// 自定义用户日志级别7
+#define COMPACT_GOOGLE_LOG_GLOG_USER7 @ac_google_namespace@::LogMessage( \
+      __FILE__, __LINE__, @ac_google_namespace@::GLOG_USER7)
+#define LOG_TO_STRING_GLOG_USER7(message) @ac_google_namespace@::LogMessage( \
+      __FILE__, __LINE__, @ac_google_namespace@::GLOG_USER7, message)
+// 自定义用户日志级别8
+#define COMPACT_GOOGLE_LOG_GLOG_USER8 @ac_google_namespace@::LogMessage( \
+      __FILE__, __LINE__, @ac_google_namespace@::GLOG_USER8)
+#define LOG_TO_STRING_GLOG_USER8(message) @ac_google_namespace@::LogMessage( \
+      __FILE__, __LINE__, @ac_google_namespace@::GLOG_USER8, message)
 
 #if defined(NDEBUG) && !defined(DCHECK_ALWAYS_ON)
 #define DCHECK_IS_ON() 0
@@ -582,6 +620,62 @@ DECLARE_bool(log_utc_time);
   &@ac_google_namespace@::LogMessage::SendToLog)
 #define SYSLOG_DFATAL(counter) \
   @ac_google_namespace@::LogMessage(__FILE__, __LINE__, @ac_google_namespace@::DFATAL_LEVEL, counter, \
+  &@ac_google_namespace@::LogMessage::SendToSyslogAndLog)
+// 用户自定义日志级别1
+#define GOOGLE_LOG_GLOG_USER1(counter) \
+  @ac_google_namespace@::LogMessage(__FILE__, __LINE__, @ac_google_namespace@::GLOG_USER1, counter, \
+  &@ac_google_namespace@::LogMessage::SendToLog)
+#define SYSLOG_GLOG_USER1(counter) \
+  @ac_google_namespace@::LogMessage(__FILE__, __LINE__, @ac_google_namespace@::GLOG_USER1, counter, \
+  &@ac_google_namespace@::LogMessage::SendToSyslogAndLog)
+// 用户自定义日志级别2
+#define GOOGLE_LOG_GLOG_USER2(counter) \
+  @ac_google_namespace@::LogMessage(__FILE__, __LINE__, @ac_google_namespace@::GLOG_USER2, counter, \
+  &@ac_google_namespace@::LogMessage::SendToLog)
+#define SYSLOG_GLOG_USER2(counter) \
+  @ac_google_namespace@::LogMessage(__FILE__, __LINE__, @ac_google_namespace@::GLOG_USER2, counter, \
+  &@ac_google_namespace@::LogMessage::SendToSyslogAndLog)
+// 用户自定义日志级别3
+#define GOOGLE_LOG_GLOG_USER3(counter) \
+  @ac_google_namespace@::LogMessage(__FILE__, __LINE__, @ac_google_namespace@::GLOG_USER3, counter, \
+  &@ac_google_namespace@::LogMessage::SendToLog)
+#define SYSLOG_GLOG_USER3(counter) \
+  @ac_google_namespace@::LogMessage(__FILE__, __LINE__, @ac_google_namespace@::GLOG_USER3, counter, \
+  &@ac_google_namespace@::LogMessage::SendToSyslogAndLog)
+// 用户自定义日志级别4
+#define GOOGLE_LOG_GLOG_USER4(counter) \
+  @ac_google_namespace@::LogMessage(__FILE__, __LINE__, @ac_google_namespace@::GLOG_USER4, counter, \
+  &@ac_google_namespace@::LogMessage::SendToLog)
+#define SYSLOG_GLOG_USER4(counter) \
+  @ac_google_namespace@::LogMessage(__FILE__, __LINE__, @ac_google_namespace@::GLOG_USER4, counter, \
+  &@ac_google_namespace@::LogMessage::SendToSyslogAndLog)
+// 用户自定义日志级别5
+#define GOOGLE_LOG_GLOG_USER5(counter) \
+  @ac_google_namespace@::LogMessage(__FILE__, __LINE__, @ac_google_namespace@::GLOG_USER5, counter, \
+  &@ac_google_namespace@::LogMessage::SendToLog)
+#define SYSLOG_GLOG_USER5(counter) \
+  @ac_google_namespace@::LogMessage(__FILE__, __LINE__, @ac_google_namespace@::GLOG_USER5, counter, \
+  &@ac_google_namespace@::LogMessage::SendToSyslogAndLog)
+// 用户自定义日志级别6
+#define GOOGLE_LOG_GLOG_USER6(counter) \
+  @ac_google_namespace@::LogMessage(__FILE__, __LINE__, @ac_google_namespace@::GLOG_USER6, counter, \
+  &@ac_google_namespace@::LogMessage::SendToLog)
+#define SYSLOG_GLOG_USER6(counter) \
+  @ac_google_namespace@::LogMessage(__FILE__, __LINE__, @ac_google_namespace@::GLOG_USER6, counter, \
+  &@ac_google_namespace@::LogMessage::SendToSyslogAndLog)
+// 用户自定义日志级别7
+#define GOOGLE_LOG_GLOG_USER7(counter) \
+  @ac_google_namespace@::LogMessage(__FILE__, __LINE__, @ac_google_namespace@::GLOG_USER7, counter, \
+  &@ac_google_namespace@::LogMessage::SendToLog)
+#define SYSLOG_GLOG_USER7(counter) \
+  @ac_google_namespace@::LogMessage(__FILE__, __LINE__, @ac_google_namespace@::GLOG_USER7, counter, \
+  &@ac_google_namespace@::LogMessage::SendToSyslogAndLog)
+// 用户自定义日志级别8
+#define GOOGLE_LOG_GLOG_USER8(counter) \
+  @ac_google_namespace@::LogMessage(__FILE__, __LINE__, @ac_google_namespace@::GLOG_USER8, counter, \
+  &@ac_google_namespace@::LogMessage::SendToLog)
+#define SYSLOG_GLOG_USER8(counter) \
+  @ac_google_namespace@::LogMessage(__FILE__, __LINE__, @ac_google_namespace@::GLOG_USER8, counter, \
   &@ac_google_namespace@::LogMessage::SendToSyslogAndLog)
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__CYGWIN__) || defined(__CYGWIN32__)

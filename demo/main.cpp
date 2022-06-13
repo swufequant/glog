@@ -74,6 +74,8 @@ int main(int argn, const char** argv)
     FLAGS_minloglevel = google::INFO;
     // 文件名里使用自己定义时间戳 废弃默认的
     FLAGS_timestamp_in_logfile_name = false;
+    // 禁止输出日志到标准输出（命令行）
+    FLAGS_logtostdout = false;
     // 指定日志目录
     FLAGS_log_dir = ".";
     // 普通日志
@@ -82,7 +84,9 @@ int main(int argn, const char** argv)
     LOG_EVERY_N(INFO, 10) << "Got the " << google::COUNTER << "th cookie";
     // 条件日志记录
     int num_cookies = 11;
-    LOG_IF(INFO, num_cookies > 10) << "Got lots of cookies";
+    LOG_IF(WARNING, num_cookies > 10) << "Got lots of cookies";
+    // 会抛出错误
+    // LOG(FATAL) << "error example 1";
     // 输出错误
     // google::InstallFailureSignalHandler();
     // google::InstallFailureWriter(&WriteError);
@@ -91,6 +95,8 @@ int main(int argn, const char** argv)
     // int a{237128179};
     // memcpy(s, &a, sizeof(int));
     // printf("%s", s);
-    LOG(GLOG_USER1) << "600130\t21.3\t31.8\t232999\t892810.00";
+    LOG(GLOG_USER1) << "300130\t21.3\t31.8\t232999\t892810.00";
+    LOG(GLOG_USER1) << "300130\t21.3\t31.9\t232003\t892811.00";
+    LOG(INFO) << "OVER";
     return 0;
 }
