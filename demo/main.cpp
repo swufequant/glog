@@ -1,9 +1,10 @@
 #include <glog/logging.h>
 #include <iomanip>
 /*
-g++ -std=c++11 main.cpp -o demo.o -lglog -L/usr/local/lib -DGLOG_CUSTOM_PREFIX_SUPPORT
-找不到库就声明路径
-export LD_LIBRARY_PATH=/usr/local/lib
+编译脚本 注意ubuntu系统的动态库路径为-L/usr/local/lib
+g++ -std=c++11 main.cpp -o demo.o -lglog -L/usr/local/lib64 -DGLOG_CUSTOM_PREFIX_SUPPORT
+找不到libglog.so.1库就声明路径
+export LD_LIBRARY_PATH=/usr/local/lib64
 如果需要使用用户自定义前缀格式则需要在编译时定义宏
 -DGLOG_CUSTOM_PREFIX_SUPPORT
 */
@@ -95,6 +96,7 @@ int main(int argn, const char** argv)
     // int a{237128179};
     // memcpy(s, &a, sizeof(int));
     // printf("%s", s);
+    // 输出行情
     LOG(GLOG_USER1) << "300130\t21.3\t31.8\t232999\t892810.00";
     LOG(GLOG_USER1) << "300130\t21.3\t31.9\t232003\t892811.00";
     LOG(INFO) << "OVER";
